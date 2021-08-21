@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css">
+    <title>絶バハセリフチャレンジ</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+        }
+
+        body {
+            background: url('bg.jpg');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+        main {
+            padding-top: 50px;
+            height: calc(100% - 50px);
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #msg {
+            font-size: 24px;
+            color: white;
+            min-width: 540px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #question {
+            margin-top: 20px;
+            height: 50px;
+            background-color: blanchedalmond;
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            min-width: 500px;
+            justify-content: center;
+        }
+
+        #choice {
+            margin-top: 20px;
+            background-color: cadetblue;
+            padding: 20px;
+            min-width: 500px;
+        }
+
+        #next {
+            margin-top: 20px;
+            height: 48px;
+            width: 100px;
+        }
+
+        #next:hover {
+            cursor: pointer;
+        }
+
+        .area {
+            padding: 20px;
+            background-color: black;
+        }
+
+        .button-area {
+            display: flex;
+            justify-content: center;
+        }
+
+        label {
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="area">
+            <div id="msg">ボタンを押すとはじまるよ！</div>
+            <div id="question">問題がここに表示されるよ！</div>
+            <div id="choice">
+                <p>正しいと思う行動を選んでね</p>
+                <div></div>
+            </div>
+            <div class="button-area">
+                <button id="next">次へ</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        $(function () {
+            var count = -1;
+            var beforeAnser = '';
+            var hoge = [
+                [
+                    '月よ！　鉄の覇道を照らせ！',
+                    '月よ！　赤熱し、神敵を焼け！'
+                ],
+                [
+                    '赤熱せし月の祝福を！',
+                    '赤熱し、焼かれし道を鉄の覇道と成す！'
+                ],
+                [
+                    '我、舞い降りて月を仰がん！',
+                    '我、舞い降りて鉄の覇道を征く！'
+                ],
+                [
+                    '超新星よ、輝きを増せ！　紅月下の赤熱せし地を照らせ！',
+                    '超新星よ、輝きを増せ！　星降りの夜に、紅月を称えよ！'
+                ],
+            ];
+            var bar = [
+                [
+                    'ルナダイナモ→アイアンチャリオット',
+                    'ルナダイナモ→サーミオニックビーム',
+                ],
+                [
+                    'サーミオニックビーム→ルナダイナモ',
+                    'サーミオニックビーム→アイアンチャリオット',
+                ],
+                [
+                    'レイヴンダイブ→ルナダイナモ',
+                    'レイヴンダイブ→アイアンチャリオット',
+                ],
+                [
+                    'スーパーノヴァx4連→ダラガブダイブ→サーミオニックビーム',
+                    'スーパーノヴァx4連→メテオストリームx4→ダラガブダイブ',
+                ],
+            ];
+
+            $('#next').on('click', function () {
+                // 判定
+                var choice = $('input[name=choice]:checked').val();
+                if (choice) {
+                    alert(choice === beforeAnser ? '正解' : '不正解');
+                }
+
+                // 前回の答えを保持
+                count = count === 3 ? 0 : (count + 1);
+                var random = Math.floor(Math.random() * 2);
+                beforeAnser = bar[count][random];
+
+                // カウンターと問題を表示
+                $('#msg').text(`セリフ　${count + 1}/${hoge.length}`);
+                $('#question').text(hoge[count][random]);
+
+                // 選択肢を表示
+                $div = $('#choice div');
+                $div.empty();
+                bar[count].forEach(function (value, index) {
+                    var $wraper = $('<div></div>').appendTo($div);
+                    $wraper.append($(`<input type="radio" id="choice${index}" name="choice" value="${value}" ${index === 0 ? 'checked' : ''}>`));
+                    $wraper.append($(`<label for="choice${index}">${value}</label>`));
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
